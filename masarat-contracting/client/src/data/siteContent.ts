@@ -71,6 +71,7 @@ export const siteCopy = {
     statEyebrow: "مؤشرات مسارات",
     statTitle: "أرقام تُحدَّث من مكانٍ واحد.",
     statText: "تظهر هذه القيم كنماذج قابلة للتعديل وليست إحصاءات فعلية للشركة.",
+    statVisitorLive: "يتحدث تلقائيًا من زيارات الموقع الفعلية.",
     whyEyebrow: "لماذا مسارات؟",
     whyTitle: "وضوح أكبر في كل مرحلة من الطريق.",
     whyItems: [
@@ -80,10 +81,7 @@ export const siteCopy = {
     ],
     reviewsEyebrow: "آراء العملاء",
     reviewsTitle: "مساحة جاهزة لثقة عملائك.",
-    reviewsText: "هذه شهادات نموذجية فقط. استبدلها بمراجعات موثقة بعد الحصول على موافقة أصحابها.",
-    quotePlaceholder: "مساحة لمراجعة عميل موثقة. أضف وصفًا مختصرًا لتجربة العميل وجودة التعاون بعد الموافقة على النشر.",
-    customerPlaceholder: "اسم العميل (نموذج)",
-    companyPlaceholder: "اسم الجهة (نموذج)",
+    reviewsText: "آراء عملاء عن جودة التنفيذ والتعامل أثناء العمل.",
     faqEyebrow: "أسئلة شائعة",
     faqTitle: "إجابات واضحة قبل بداية العمل.",
     ctaEyebrow: "ابدأ من هنا",
@@ -98,6 +96,10 @@ export const siteCopy = {
     phone: "رقم الجوال",
     email: "البريد الإلكتروني",
     message: "رسالتك",
+    enquiryType: "نوع الاستفسار",
+    enquiryQuote: "اطلب عرض سعر",
+    enquiryQuestion: "استفسار",
+    addReview: "إضافة تعليق",
     namePlaceholder: "الاسم الكامل",
     phonePlaceholder: "05X XXX XXXX",
     emailPlaceholder: "name@example.com",
@@ -158,6 +160,7 @@ export const siteCopy = {
     statEyebrow: "Masarat indicators",
     statTitle: "Numbers updated from one place.",
     statText: "These values are editable examples—not real company statistics.",
+    statVisitorLive: "Updates automatically from real website visits.",
     whyEyebrow: "Why Masarat?",
     whyTitle: "More clarity at every stage of the road.",
     whyItems: [
@@ -167,10 +170,7 @@ export const siteCopy = {
     ],
     reviewsEyebrow: "Client reviews",
     reviewsTitle: "A space ready for your clients’ trust.",
-    reviewsText: "These are placeholders only. Replace them with verified reviews after receiving permission to publish.",
-    quotePlaceholder: "Space for a verified client review. Add a short account of the client experience and collaboration quality after publication approval.",
-    customerPlaceholder: "Client name (placeholder)",
-    companyPlaceholder: "Company name (placeholder)",
+    reviewsText: "Client feedback on execution quality and the working experience.",
     faqEyebrow: "Common questions",
     faqTitle: "Clear answers before work begins.",
     ctaEyebrow: "Start here",
@@ -185,6 +185,10 @@ export const siteCopy = {
     phone: "Mobile number",
     email: "Email address",
     message: "Your message",
+    enquiryType: "Enquiry type",
+    enquiryQuote: "Request a quotation",
+    enquiryQuestion: "General enquiry",
+    addReview: "Add a review",
     namePlaceholder: "Full name",
     phonePlaceholder: "05X XXX XXXX",
     emailPlaceholder: "name@example.com",
@@ -210,6 +214,21 @@ export const siteCopy = {
     projectLocationLabel: "Location",
   },
 } as const;
+
+export const testimonials = [
+  {
+    quote: { ar: "شغلهم كويس مره تعاملت معهم مرتين وأشكر المهندس ليث على حسن التعامل.", en: "Their work is really good. I worked with them twice, and I thank Engineer Laith for his professional and respectful service." },
+    name: { ar: "فيصل العتيبي", en: "Faisal Al-Otaibi" },
+  },
+  {
+    quote: { ar: "حاب أشكر المهندس ليث، هو اللي ماسك الشغل. حصلت مشكلة لكن ما خلّى الشغل ينتهي إلا وأنا راضي، يعطيهم العافية.", en: "I would like to thank Engineer Laith, who managed the work. An issue came up, but he did not close the job until I was satisfied. Thank you to the whole team." },
+    name: { ar: "ياسر الشهراني", en: "Yasser Al-Shahrani" },
+  },
+  {
+    quote: { ar: "شغلهم ممتاز ومرتب، ما شاء الله.", en: "Their work is excellent and well organised, mashallah." },
+    name: { ar: "أبو خالد", en: "Abu Khalid" },
+  },
+] as const;
 
 export const services = [
   {
