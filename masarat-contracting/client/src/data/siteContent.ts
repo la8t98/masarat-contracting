@@ -282,12 +282,12 @@ export const gallery = [
   { image: company.images.detail, alt: { ar: "تفاصيل سطح أسفلت وخط طريق — صورة نموذجية", en: "Asphalt surface and road-marking detail — placeholder image" } },
 ] as const;
 
-// Values are deliberately set to zero: change them here only when real, approved figures are available.
+// Starter values are editable in one place; replace them with approved company figures as they grow.
 export const statistics = [
-  { value: 0, suffix: "+", label: { ar: "مشروع مكتمل", en: "Completed projects" } },
-  { value: 0, suffix: "+", label: { ar: "زائر للموقع", en: "Website visitors" } },
-  { value: 0, suffix: "", label: { ar: "خدمة متاحة", en: "Available services" } },
-  { value: 0, suffix: "%", label: { ar: "رضا العملاء", en: "Customer satisfaction" } },
+  { value: 25, suffix: "+", label: { ar: "مشروع مكتمل", en: "Completed projects" } },
+  { value: 1200, suffix: "+", label: { ar: "زائر للموقع", en: "Website visitors" } },
+  { value: 6, suffix: "", label: { ar: "خدمات متاحة", en: "Available services" } },
+  { value: 98, suffix: "%", label: { ar: "رضا العملاء", en: "Customer satisfaction" } },
 ] as const;
 
 export const faqs = [
