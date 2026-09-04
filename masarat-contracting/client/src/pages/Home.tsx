@@ -90,7 +90,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [reviewIndex, setReviewIndex] = useState(0);
-  const [formState, setFormState] = useState<"idle" | "error" | "success">("idle");
+  const [formState, setFormState] = useState<"idle" | "error" | "success" | "sending">("idle");
   const [backToTop, setBackToTop] = useState(false);
   const copy = siteCopy[language];
   const direction = language === "ar" ? "rtl" : "ltr";
@@ -138,7 +138,7 @@ export default function Home() {
   const toggleLanguage = () => setLanguage((current) => current === "ar" ? "en" : "ar");
   const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
 
-  const submitForm = (event: FormEvent<HTMLFormElement>) => {
+  const submitForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
     const data = new FormData(form);
@@ -147,8 +147,24 @@ export default function Home() {
     const email = String(data.get("email") || "").trim();
     const message = String(data.get("message") || "").trim();
     const valid = name.length > 1 && phone.length >= 7 && /^\S+@\S+\.\S+$/.test(email) && message.length >= 8;
-    setFormState(valid ? "success" : "error");
-    if (valid) form.reset();
+    if (!valid) {
+      setFormState("error");
+      return;
+    }
+
+    setFormState("sending");
+    try {
+      const response = await fetch("https://formspree.io/f/xjyvokgy", {
+        method: "POST",
+        body: data,
+        headers: { Accept: "application/json" },
+      });
+      if (!response.ok) throw new Error("Form submission failed");
+      setFormState("success");
+      form.reset();
+    } catch {
+      setFormState("error");
+    }
   };
 
   const organizationSchema = {
@@ -373,7 +389,7 @@ export default function Home() {
                   <label>{copy.email}<input name="email" type="email" placeholder={copy.emailPlaceholder} autoComplete="email" /></label>
                   <label>{copy.message}<textarea name="message" placeholder={copy.messagePlaceholder} rows={4} /></label>
                   <button className="button button--green" type="submit">{copy.submit}<ArrowLeft size={17} /></button>
-                  {formState !== "idle" && <p className={`form-message form-message--${formState}`} role="status">{formState === "success" ? copy.formSuccess : copy.formError}</p>}
+                  {formState !== "idle" && <p className={`form-message form-message--${formState}`} role="status">{formState === "success" ? copy.formSuccess : formState === "sending" ? copy.formSending : copy.formError}</p>}
                   <p className="form-note"><ShieldCheck size={14} />{copy.contactFormNote}</p>
                 </form>
               </Reveal>
