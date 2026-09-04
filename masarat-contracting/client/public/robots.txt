@@ -1,5 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://www.example.com/sitemap.xml
-
-# Replace example.com with the production domain before publishing.
+Sitemap: https://la8t98.github.io/masarat-contracting/sitemap.xml
