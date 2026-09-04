@@ -18,6 +18,10 @@ export const company = {
     parking: `${assetBase}images/project-parking.webp`,
     leveling: `${assetBase}images/project-leveling.webp`,
     detail: `${assetBase}images/asphalt-detail.webp`,
+    work01: `${assetBase}images/masarat-work-01.webp`,
+    work02: `${assetBase}images/masarat-work-02.webp`,
+    work03: `${assetBase}images/masarat-work-03.webp`,
+    work04: `${assetBase}images/masarat-work-04.webp`,
   },
 };
 
@@ -268,6 +272,10 @@ export const projects = [
 ] as const;
 
 export const gallery = [
+  { image: company.images.work01, alt: { ar: "معدات رصف الأسفلت أثناء تنفيذ الأعمال", en: "Asphalt paving equipment during project work" } },
+  { image: company.images.work02, alt: { ar: "تنفيذ أعمال الرصف ومعدات الموقع", en: "Paving work in progress with site equipment" } },
+  { image: company.images.work03, alt: { ar: "دمك طبقة الأسفلت أثناء تنفيذ الطريق", en: "Compacting the asphalt layer during road construction" } },
+  { image: company.images.work04, alt: { ar: "تفريغ مواد الأسفلت وتجهيز موقع العمل", en: "Delivering asphalt materials and preparing the work site" } },
   { image: company.images.routes, alt: { ar: "طريق حضري معبّد في الرياض — صورة نموذجية", en: "Paved urban road in Riyadh — placeholder image" } },
   { image: company.images.parking, alt: { ar: "موقف تجاري معبّد — صورة نموذجية", en: "Paved commercial parking area — placeholder image" } },
   { image: company.images.leveling, alt: { ar: "معدات تجهيز طريق في موقع عمل — صورة نموذجية", en: "Road preparation equipment on site — placeholder image" } },
