@@ -31,6 +31,7 @@ import {
   services,
   siteCopy,
   statistics,
+  testimonials,
   type Language,
 } from "../data/siteContent";
 
@@ -53,13 +54,13 @@ function SectionHeading({ eyebrow, title, body, light = false }: { eyebrow: stri
   );
 }
 
-function AnimatedStat({ value, suffix, label, note }: { value: number; suffix: string; label: string; note: string }) {
+function AnimatedStat({ value, suffix, label, note }: { value: number | null; suffix: string; label: string; note: string }) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [shown, setShown] = useState(0);
 
   useEffect(() => {
     const node = ref.current;
-    if (!node) return;
+    if (!node || value === null) return;
     const observer = new IntersectionObserver(([entry]) => {
       if (!entry.isIntersecting) return;
       const start = performance.now();
@@ -78,7 +79,7 @@ function AnimatedStat({ value, suffix, label, note }: { value: number; suffix: s
 
   return (
     <div className="stat" ref={ref}>
-      <strong>{shown}{suffix}</strong>
+      <strong>{value === null ? "—" : `${shown}${suffix}`}</strong>
       <span>{label}</span>
       <small>{note}</small>
     </div>
@@ -92,6 +93,7 @@ export default function Home() {
   const [reviewIndex, setReviewIndex] = useState(0);
   const [formState, setFormState] = useState<"idle" | "error" | "success" | "sending">("idle");
   const [backToTop, setBackToTop] = useState(false);
+  const [visitorCount, setVisitorCount] = useState<number | null>(null);
   const copy = siteCopy[language];
   const direction = language === "ar" ? "rtl" : "ltr";
   const isArabic = language === "ar";
@@ -135,6 +137,18 @@ export default function Home() {
     return () => window.clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch("https://webora.goatcounter.com/counter/TOTAL.json", { signal: controller.signal })
+      .then((response) => response.ok ? response.json() : Promise.reject(new Error("Visitor count unavailable")))
+      .then((data: { count?: string | number }) => {
+        const parsed = Number(String(data.count ?? "").replace(/[^0-9]/g, ""));
+        if (Number.isFinite(parsed)) setVisitorCount(parsed);
+      })
+      .catch(() => undefined);
+    return () => controller.abort();
+  }, []);
+
   const toggleLanguage = () => setLanguage((current) => current === "ar" ? "en" : "ar");
   const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
 
@@ -146,7 +160,8 @@ export default function Home() {
     const phone = String(data.get("phone") || "").trim();
     const email = String(data.get("email") || "").trim();
     const message = String(data.get("message") || "").trim();
-    const valid = name.length > 1 && phone.length >= 7 && /^\S+@\S+\.\S+$/.test(email) && message.length >= 8;
+    const enquiryType = String(data.get("enquiryType") || "").trim();
+    const valid = name.length > 1 && phone.length >= 7 && /^\S+@\S+\.\S+$/.test(email) && enquiryType.length > 0 && message.length >= 8;
     if (!valid) {
       setFormState("error");
       return;
@@ -197,12 +212,6 @@ export default function Home() {
       acceptedAnswer: { "@type": "Answer", text: faq.answer[language] },
     })),
   };
-
-  const testimonials = [0, 1, 2].map((index) => ({
-    quote: copy.quotePlaceholder,
-    name: `${copy.customerPlaceholder} ${String(index + 1).padStart(2, "0")}`,
-    company: copy.companyPlaceholder,
-  }));
 
   return (
     <div className={`site ${isArabic ? "site--arabic" : "site--english"}`} dir={direction}>
@@ -329,7 +338,7 @@ export default function Home() {
           <div className="container metrics__layout">
             <Reveal><SectionHeading light eyebrow={copy.statEyebrow} title={copy.statTitle} body={copy.statText} /></Reveal>
             <div className="metrics__grid">
-              {statistics.map((stat, index) => <AnimatedStat key={stat.label.en} value={stat.value} suffix={stat.suffix} label={stat.label[language]} note={copy.statEdit} />)}
+              {statistics.map((stat, index) => <AnimatedStat key={stat.label.en} value={index === 1 ? visitorCount : stat.value} suffix={stat.suffix} label={stat.label[language]} note={index === 1 ? copy.statVisitorLive : copy.statEdit} />)}
             </div>
           </div>
         </section>
@@ -348,8 +357,9 @@ export default function Home() {
             <Reveal><SectionHeading eyebrow={copy.reviewsEyebrow} title={copy.reviewsTitle} body={copy.reviewsText} /></Reveal>
             <Reveal className="testimonial" delay={140}>
               <div className="testimonial__stars" aria-label="5 out of 5 placeholder rating">{Array.from({ length: 5 }, (_, index) => <Star key={index} size={16} fill="currentColor" />)}</div>
-              <blockquote>“{testimonials[reviewIndex].quote}”</blockquote>
-              <div className="testimonial__footer"><div className="testimonial__avatar">{String(reviewIndex + 1).padStart(2, "0")}</div><div><strong>{testimonials[reviewIndex].name}</strong><span>{testimonials[reviewIndex].company}</span></div><div className="testimonial__controls"><button onClick={() => setReviewIndex((reviewIndex + 2) % 3)} aria-label={copy.previous}><ChevronRight size={18} /></button><button onClick={() => setReviewIndex((reviewIndex + 1) % 3)} aria-label={copy.next}><ChevronLeft size={18} /></button></div></div>
+              <blockquote>“{testimonials[reviewIndex].quote[language]}”</blockquote>
+              <div className="testimonial__footer"><div className="testimonial__avatar">{String(reviewIndex + 1).padStart(2, "0")}</div><div><strong>{testimonials[reviewIndex].name[language]}</strong><span>{isArabic ? "عميل مسارات" : "Masarat client"}</span></div><div className="testimonial__controls"><button onClick={() => setReviewIndex((reviewIndex + 2) % 3)} aria-label={copy.previous}><ChevronRight size={18} /></button><button onClick={() => setReviewIndex((reviewIndex + 1) % 3)} aria-label={copy.next}><ChevronLeft size={18} /></button></div></div>
+              <button type="button" className="testimonial__add" onClick={() => scrollTo("contact")}>{copy.addReview}<ArrowLeft size={15} /></button>
               <div className="testimonial__pager">{testimonials.map((_, index) => <button key={index} onClick={() => setReviewIndex(index)} className={reviewIndex === index ? "active" : ""} aria-label={`Review ${index + 1}`} />)}</div>
             </Reveal>
           </div>
@@ -387,6 +397,7 @@ export default function Home() {
                   <label>{copy.name}<input name="name" type="text" placeholder={copy.namePlaceholder} autoComplete="name" /></label>
                   <label>{copy.phone}<input name="phone" type="tel" placeholder={copy.phonePlaceholder} autoComplete="tel" inputMode="tel" /></label>
                   <label>{copy.email}<input name="email" type="email" placeholder={copy.emailPlaceholder} autoComplete="email" /></label>
+                  <label>{copy.enquiryType}<select name="enquiryType" defaultValue="" required><option value="" disabled>{copy.enquiryType}</option><option value="quote">{copy.enquiryQuote}</option><option value="question">{copy.enquiryQuestion}</option></select></label>
                   <label>{copy.message}<textarea name="message" placeholder={copy.messagePlaceholder} rows={4} /></label>
                   <button className="button button--green" type="submit">{copy.submit}<ArrowLeft size={17} /></button>
                   {formState !== "idle" && <p className={`form-message form-message--${formState}`} role="status">{formState === "success" ? copy.formSuccess : formState === "sending" ? copy.formSending : copy.formError}</p>}
