@@ -17,6 +17,7 @@ export const company = {
     routes: `${assetBase}images/project-routes.webp`,
     parking: `${assetBase}images/project-parking.webp`,
     leveling: `${assetBase}images/project-leveling.webp`,
+    planning: `${assetBase}images/project-planning.webp`,
     detail: `${assetBase}images/asphalt-detail.webp`,
     work01: `${assetBase}images/masarat-work-01.webp`,
     work02: `${assetBase}images/masarat-work-02.webp`,
@@ -298,6 +299,7 @@ export const gallery = [
   { image: company.images.routes, alt: { ar: "طريق حضري معبّد في الرياض — صورة نموذجية", en: "Paved urban road in Riyadh — placeholder image" } },
   { image: company.images.parking, alt: { ar: "موقف تجاري معبّد — صورة نموذجية", en: "Paved commercial parking area — placeholder image" } },
   { image: company.images.leveling, alt: { ar: "معدات تجهيز طريق في موقع عمل — صورة نموذجية", en: "Road preparation equipment on site — placeholder image" } },
+  { image: company.images.planning, alt: { ar: "تخطيط طريق أسفلتي بعلامات اتجاهية وممرات منظمة", en: "Planned asphalt road with directional markings and organised lanes" } },
   { image: company.images.detail, alt: { ar: "تفاصيل سطح أسفلت وخط طريق — صورة نموذجية", en: "Asphalt surface and road-marking detail — placeholder image" } },
 ] as const;
 
